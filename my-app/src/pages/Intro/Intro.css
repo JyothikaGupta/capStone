@@ -1,0 +1,124 @@
+/* Ensure the full page layout */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.intro-content {
+    flex-grow: 1; /* Fills the space between header and footer */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);;
+}
+
+.text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 600px;
+    margin-right: 2rem; /* Space between text content and animation */
+}
+
+.intro-content h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.intro-content p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.lottie-animation {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.text-content h1,
+.text-content p,
+.cta-button {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.text-content h1 { animation-delay: 0.2s; }
+.text-content p { animation-delay: 0.4s; }
+.cta-button { animation-delay: 0.6s; }
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .intro-content {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+    .text-content {
+        margin-right: 0;
+        max-width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .lottie-animation {
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .text-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .text-content p {
+        font-size: 0.9rem;
+    }
+
+    .cta-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .lottie-animation {
+        max-width: 250px;
+    }
+}
