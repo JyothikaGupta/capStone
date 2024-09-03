@@ -2,10 +2,14 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8070/api/tasks";
 
+export const getCurrentUserId = () => {
+    return localStorage.getItem('userId');
+};
+
 // Function to get tasks
-export const getTasks = async () => {
+export const getTasks = async (userId) => {
     try {
-        const response = await axios.get(API_BASE_URL);
+        const response = await axios.get(`${API_BASE_URL}/user/${userId}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -16,7 +20,7 @@ export const getTasks = async () => {
 // Function to add a new task
 export const addTask = async (task) => {
     try {
-        const response = await axios.post(API_BASE_URL, task, {
+        const response = await axios.post(`${API_BASE_URL}`, task, {
             headers: {
                 'Content-Type': 'application/json'
             }

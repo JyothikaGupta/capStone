@@ -21,6 +21,8 @@ const Header = () => {
       <div className="container header-container">
         <Link to="/dashboard" className="header-brand">Haven Mind</Link>
         <div className="header-links">
+        <Link to="/news" className="header-link">News</Link>
+        <Link to="/moodtracker" className="header-link">Mood Tracker</Link>
         
           <Link to="/tasks" className="header-link">Task Creation</Link>
           

@@ -21,17 +21,25 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .exceptionHandling().authenticationEntryPoint(userAuthenticationEntryPoint)
+//                .and()
+//                .addFilterBefore(new JwtAuthFilter(userAuthenticationProvider), BasicAuthenticationFilter.class)
+//                .csrf().disable()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeHttpRequests((requests) -> requests
+//                        .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/api/tasks/**").permitAll()
+//                        .anyRequest().authenticated())
+//        ;
+//        return http.build();
+
         http
-                .exceptionHandling().authenticationEntryPoint(userAuthenticationEntryPoint)
+                .authorizeRequests()
+                .anyRequest().permitAll()  // Allow all requests
                 .and()
-                .addFilterBefore(new JwtAuthFilter(userAuthenticationProvider), BasicAuthenticationFilter.class)
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
-                        .anyRequest().authenticated())
-        ;
+                .csrf().disable();  // Disable CSRF protection if not needed
         return http.build();
     }
 }

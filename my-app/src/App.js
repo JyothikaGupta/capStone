@@ -13,7 +13,8 @@ import Test from './pages/Test/test';
 import TaskDashboard from '../src/components/TaskDashboard';
 import ProtectedRoute from './pages/ProtectedRoute'; // Import the ProtectedRoute component
 import Chatbox from './components/Hero/ChatBox';
-import { isAuthenticated } from './connection/auth';
+import NewsFeed from './pages/News/News';
+import MoodTracker from './pages/MoodTracker/MoodTracker';
 
 function App() {
   return (
@@ -26,14 +27,14 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* Protected Routes */}
-        
+        <Route path="/news" element={<ProtectedRoute element={<NewsFeed />} />} />
+        <Route path="/moodtracker" element={<ProtectedRoute element={<MoodTracker />} />} />
         <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
         <Route path="/emergency" element={<ProtectedRoute element={<Emergency />} />} />
         <Route path="/mentalwellbeing/Introduction" element={<ProtectedRoute element={<Intro />} />} />
         <Route path="/instructions" element={<ProtectedRoute element={<Instructions />} />} />
         <Route path="/test" element={<ProtectedRoute element={<Test />} />} />
         <Route path="/tasks" element={<ProtectedRoute element={<TaskDashboard />} />} />
-        
 
         {/* Redirect to mentalwellbeing introduction */}
         <Route path="/mentalwellbeing" element={<Navigate to="/mentalwellbeing/Introduction" />} />

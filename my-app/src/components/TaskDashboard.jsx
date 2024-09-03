@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import { getTasks, addTask, updateTaskPriority, deleteTask, updateTaskText, updateTaskReminder } from './taskService';
+import { getTasks, addTask, updateTaskPriority, deleteTask, updateTaskText, updateTaskReminder,getCurrentUserId } from './taskService';
 import { format, isPast } from 'date-fns';
 import { Bell, Edit, Trash2, Save } from 'lucide-react';
 import './TaskDashboard.css';
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
+
 
 const API_URL = 'http://localhost:8070/api/tasks';
 
@@ -32,7 +33,8 @@ const TaskDashboard = () => {
 
     const fetchTasks = async () => {
         try {
-            const tasksData = await getTasks();
+            const userId = getCurrentUserId();
+            const tasksData = await getTasks(userId);
             setTasks(tasksData);
         } catch (error) {
             showAlert("Error fetching tasks", "error");
@@ -70,7 +72,9 @@ const TaskDashboard = () => {
         if (textInput.trim() === "") return;
 
         try {
+            const userId = getCurrentUserId();
             const newTask = { 
+                userId, // Include the user ID
                 text: textInput, 
                 priority: selectedPriority,
                 reminderTime: reminderTime ? new Date(reminderTime).toISOString() : null
