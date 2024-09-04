@@ -62,7 +62,7 @@ const MoodTracker = () => {
         });
         setRecommendations(recommendationsResponse.data);
       } catch (err) {
-        setError('Error fetching data: ' + err.message);
+        setError('Error fetching data ');
       } finally {
         setLoading(false);
       }
@@ -103,7 +103,7 @@ const MoodTracker = () => {
       }));
       setWeeklyMoodData(data);
     } catch (error) {
-      alert('Error saving mood entry: ' + error.message);
+      alert('Error saving mood entry: ');
     }
   };
 

@@ -68,7 +68,8 @@ const TaskDashboard = () => {
         setTimeout(() => setAlert(null), 3000);
     };
 
-    const handleTaskSubmit = async () => {
+    const handleTaskSubmit = async (e) => {
+        e.preventDefault(); 
         if (textInput.trim() === "") return;
 
         try {
