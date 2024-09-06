@@ -105,28 +105,34 @@ const Test = () => {
     return SCORE_RANGES.find(range => score >= range.min && score <= range.max).level;
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const totalScore = calculateScore();
     const level = getDepressionLevel(totalScore);
     setScore(totalScore);
     setDepressionLevel(level);
-    // Prepare data to send
+  
+    // Retrieve userId from localStorage
+    const userId = localStorage.getItem('userId');
+  
     // Prepare data to send
     const testData = {
       score: totalScore,
-      depressionLevel: level
+      depressionLevel: level,
+      userId: userId // Include userId in the data
     };
-
+  
     // Send data to the backend
     try {
-      await axios.post('http://localhost:8092/api/test-scores', testData);
+      await axios.post('http://localhost:9000/test-scores', testData);
       alert('Test score saved successfully!');
     } catch (error) {
       console.error('There was an error saving the test score!', error);
+      alert('Failed to save test score. Please try again.');
     }
+    
   };
-
+  
   const ResultsDisplay = ({ score, level }) => (
     <div className="results-display">
       <h2>Test Results</h2>

@@ -47,6 +47,8 @@
     font-size: 12px;
 }
 
+
+
 .notification-dropdown {
     position: absolute;
     top: 50px;
@@ -56,25 +58,44 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 300px;
-    max-height: 400px;
-    overflow-y: auto;
+    max-height: 400px; /* Set a maximum height for the dropdown */
+    overflow-y: auto; /* Enable vertical scrolling */
     z-index: 1000;
+    padding: 0; /* Ensure there's no padding affecting height */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
+/* Adjust the notification-item style for better spacing */
 .notification-item {
     padding: 12px 16px;
     border-bottom: 1px solid #eee;
+    box-sizing: border-box; /* Ensure padding is included in height calculation */
 }
 
 .notification-item:last-child {
     border-bottom: none;
 }
 
+/* Optional: Adjust the styling of the scrollbar for better aesthetics */
+.notification-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notification-dropdown::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.notification-dropdown::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}
+
+
 .clear-notifications-btn {
     display: block;
     width: 100%;
     padding: 12px;
-    background-color: #f0f0f0;
+    background-color: 45a049;
     border: none;
     border-top: 1px solid #ddd;
     cursor: pointer;

@@ -15,16 +15,21 @@ import ProtectedRoute from './pages/ProtectedRoute'; // Import the ProtectedRout
 import Chatbox from './components/Hero/ChatBox';
 import NewsFeed from './pages/News/News';
 import MoodTracker from './pages/MoodTracker/MoodTracker';
+import PreviousScores from './pages/Intro/PreviousScores';
+import Home1 from './pages/Home/Home1';
+import PreviousMoodReports from './pages/MoodTracker/MoodReport';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/previous-scores" element={<PreviousScores />} />
 
         {/* Protected Routes */}
         <Route path="/news" element={<ProtectedRoute element={<NewsFeed />} />} />
@@ -35,6 +40,8 @@ function App() {
         <Route path="/instructions" element={<ProtectedRoute element={<Instructions />} />} />
         <Route path="/test" element={<ProtectedRoute element={<Test />} />} />
         <Route path="/tasks" element={<ProtectedRoute element={<TaskDashboard />} />} />
+        <Route path="/home1" element={<ProtectedRoute element={<Home1 />}/>}/>
+        <Route path="/previousreports" element={<ProtectedRoute element={<PreviousMoodReports />}/>}/>
 
         {/* Redirect to mentalwellbeing introduction */}
         <Route path="/mentalwellbeing" element={<Navigate to="/mentalwellbeing/Introduction" />} />

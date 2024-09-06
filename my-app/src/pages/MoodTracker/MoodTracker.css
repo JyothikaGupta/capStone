@@ -111,3 +111,47 @@
       flex-direction: column;
     }
   }
+  .previous-mood-reports ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .previous-mood-reports li {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .previous-mood-reports li p {
+    margin: 5px 0;
+  }
+  /* Add these new styles to your existing MoodTracker.css file */
+
+.mood-tracker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mood-tracker-header h1 {
+  margin: 0;
+}
+
+.view-previous-reports-btn {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  border-radius: 25px !important;
+  text-transform: none !important;
+  font-size: 1rem !important;
+  transition: background-color 0.3s, transform 0.3s !important;
+}
+
+.view-previous-reports-btn:hover {
+  background-color: #45a049 !important;
+  transform: translateY(-2px);
+}
+
+/* You may need to adjust other styles in your existing CSS to ensure proper layout */

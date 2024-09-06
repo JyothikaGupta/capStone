@@ -2,28 +2,45 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import { request } from '../../connection/auth'; // Import your auth utility functions
 import './Register.css';
 import axios from 'axios';
 
 const Register = () => {
-  const [firstName, setFirstName] = useState('');  // New state for firstName
-  const [lastName, setLastName] = useState('');    // New state for lastName
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const validateInput = () => {
+    if (!firstName || !lastName || !login || !password) {
+      setError('All fields are required.');
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(login)) {
+      setError('Invalid email format.');
+      return false;
+    }
+    // Password validation: At least 6 characters, one uppercase letter, one number, and one special character
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    if (!passwordRegex.test(password)) {
+      setError('Password must be at least 6 characters long, include one uppercase letter, one number, and one special character.');
+      return false;
+    }
+    setError('');
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateInput()) return;
 
+    setIsSubmitting(true);
     try {
-      // Include 'firstName' and 'lastName' in the request body
-      //const response = await request('post', '/register', { firstName, lastName, login, password });
       const response = await axios.post('/register', { firstName, lastName, login, password });
-
       console.log('Registration successful', response.data);
-      // Redirect to login page or automatically log the user in
       navigate('/login');
     } catch (err) {
       console.error('Registration failed', err);
@@ -32,6 +49,8 @@ const Register = () => {
       } else {
         setError('Registration failed. Please try again.');
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -83,7 +102,9 @@ const Register = () => {
                 required
               />
             </div>
-            <button type="submit" className="btn btn-primary">Register</button>
+            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? 'Registering...' : 'Register'}
+            </button>
           </form>
           <p className="register-login-link">
             Already have an account? <Link to="/login">Log in</Link>

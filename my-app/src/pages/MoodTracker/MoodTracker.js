@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import axios from 'axios';
-import './MoodTracker.css'; // For styling
+import './MoodTracker.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 
@@ -27,7 +28,6 @@ const getCurrentUserId = () => {
   return localStorage.getItem('userId');
 };
 
-
 const MoodTracker = () => {
   const [mood, setMood] = useState(5);
   const [weeklyMoodData, setWeeklyMoodData] = useState([]);
@@ -37,6 +37,7 @@ const MoodTracker = () => {
   const [recommendations, setRecommendations] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +63,7 @@ const MoodTracker = () => {
         });
         setRecommendations(recommendationsResponse.data);
       } catch (err) {
-        setError('Error fetching data ');
+        setError('Error fetching data');
       } finally {
         setLoading(false);
       }
@@ -73,6 +74,10 @@ const MoodTracker = () => {
 
   const handleMoodChange = (event, newValue) => {
     setMood(newValue);
+  };
+
+  const handleViewPreviousReports = () => {
+    navigate('/previousreports');
   };
 
   const handleSaveMood = async () => {
@@ -103,14 +108,25 @@ const MoodTracker = () => {
       }));
       setWeeklyMoodData(data);
     } catch (error) {
-      alert('Error saving mood entry: ');
+      alert('Error saving mood entry');
     }
   };
 
   return (
     <div className="mood-tracker">
-        {<Header />}
-      <h1>Daily Mood Tracker</h1>
+      <Header />
+      <br></br>
+      <div className="mood-tracker-header">
+        <h1></h1>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleViewPreviousReports}
+          className="view-previous-reports-btn"
+        >
+          View Previous Mood Reports
+        </Button>
+      </div>
       <div className="slider-container">
         <h2>Rate Your Mood</h2>
         <Slider
@@ -121,7 +137,6 @@ const MoodTracker = () => {
           onChange={handleMoodChange}
           aria-labelledby="mood-slider"
           valueLabelDisplay="auto"
-          
         />
         <div className="mood-description">
           <h3>Mood Description:</h3>
@@ -193,10 +208,9 @@ const MoodTracker = () => {
           <p>{recommendations}</p>
         )}
       </div>
-      {<Footer />}
+      <Footer />
     </div>
   );
 };
 
 export default MoodTracker;
-

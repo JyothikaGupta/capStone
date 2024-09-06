@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SearchBar from './SearchBar';
 import VideoList from './VideoList';
-import './Dashboard.css'; // Ensure this file includes your CSS
+import './Dashboard.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-
 
 function Dashboard() {
     const [videos, setVideos] = useState([]);
     const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+
+    
 
     const categories = [
         'self help', 
@@ -26,11 +29,9 @@ function Dashboard() {
     const fetchVideos = async (query) => {
         try {
             const response = await fetch(`http://localhost:8888/api/videos?query=${query}`);
-            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
             const data = await response.json();
             setVideos(data);
         } catch (err) {
@@ -47,8 +48,6 @@ function Dashboard() {
     const handleCategoryChange = async (event) => {
         const category = event.target.value;
         setSelectedCategory(category);
-
-        // Fetch videos based on the selected category
         if (category) {
             fetchVideos(category);
         } else {
@@ -58,7 +57,8 @@ function Dashboard() {
 
     return (
         <div className="app-container">
-            {<Header />}
+            <ToastContainer />
+            <Header />
             <h1>Video Recommendations</h1>
             <SearchBar onSearch={handleSearch} />
             <div className="categories-container">
@@ -79,7 +79,7 @@ function Dashboard() {
             </div>
             {error && <p className="error-message">{error}</p>}
             <VideoList videos={videos} />
-            {<Footer />}
+            <Footer />
         </div>
     );
 }

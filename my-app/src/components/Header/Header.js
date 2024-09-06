@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
-import logo from '../../assets/image.png'; // Make sure to place your logo image in the correct path
+import logo from '../../assets/image.png';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ const Header = () => {
     try {
       window.localStorage.clear();
       window.location.href = "/login";
+      toast.success("Logged out successfully!");
       console.log("User logged out successfully!");
     } catch (error) {
       console.error("Error logging out:", error.message);
@@ -19,9 +21,10 @@ const Header = () => {
   return (
     <nav className="header">
       <div className="container header-container">
-        <Link to="/dashboard" className="header-brand">
-          <img src={logo} alt="Logo" className="header-logo" />
-          Haven Mind
+        
+        <Link to="/home1" className="navbar-brand">
+          <img src={logo} alt="Logo" className="navbar-logo" />
+          Safe Space
         </Link>
         <div className="header-links">
           <Link to="/news" className="header-link">News</Link>

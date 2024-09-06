@@ -8,12 +8,12 @@ const About = () => {
     <div className="about-page">
       <Navbar />
       <div className="about-container">
-        <h1 className="about-title">About Heaven Mind</h1>
+        <h1 className="about-title">About Safe Space</h1>
         <div className="about-content">
           <section className="about-section fade-in">
             <h2>Our Mission</h2>
             <p>
-              Heaven Mind is dedicated to empowering individuals to live safer, healthier lives. Our mission is to provide innovative solutions that enhance personal safety and well-being, ensuring peace of mind for our users and their loved ones.
+            Safe Space is dedicated to empowering individuals to live safer, healthier lives. Our mission is to provide innovative solutions that enhance personal safety and well-being, ensuring peace of mind for our users and their loved ones.
             </p>
           </section>
           <section className="about-section fade-in">
