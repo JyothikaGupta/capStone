@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import { getTasks, addTask, updateTaskPriority, deleteTask, updateTaskText, updateTaskReminder,getCurrentUserId } from './taskService';
+import { getTasks, addTask, updateTaskPriority, deleteTask, updateTaskText, updateTaskReminder, getCurrentUserId } from './taskService';
 import { format, isPast } from 'date-fns';
 import { Bell, Edit, Trash2, Save } from 'lucide-react';
 import './TaskDashboard.css';
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
-
 
 const API_URL = 'http://localhost:8070/api/tasks';
 
@@ -20,17 +19,17 @@ const TaskDashboard = () => {
     const [alert, setAlert] = useState(null);
     const [notifications, setNotifications] = useState([]);
     const [showNotifications, setShowNotifications] = useState(false);
-    
 
     useEffect(() => {
         fetchTasks();
+        fetchNotifications(); // Fetch notifications on component mount
         const intervalId = setInterval(() => {
-            fetchNotifications();
-            checkReminders();
-        }, 60000); // Check every minute
+            fetchNotifications(); // Check for new notifications every minute
+        }, 60000); 
         return () => clearInterval(intervalId);
     }, []);
 
+    // Fetch tasks for the current user
     const fetchTasks = async () => {
         try {
             const userId = getCurrentUserId();
@@ -41,6 +40,7 @@ const TaskDashboard = () => {
         }
     };
 
+    // Fetch notifications for due tasks
     const fetchNotifications = async () => {
         try {
             const response = await axios.get(`${API_URL}/notifications`);
@@ -53,21 +53,13 @@ const TaskDashboard = () => {
         }
     };
 
-    const checkReminders = () => {
-        const now = new Date();
-        tasks.forEach(task => {
-            if (task.reminderTime && isPast(new Date(task.reminderTime)) && !notifications.some(n => n.id === task.id)) {
-                setNotifications(prevNotifications => [...prevNotifications, task]);
-                showAlert(`Reminder: ${task.text}`, "info");
-            }
-        });
-    };
-
+    // Show alert messages for actions
     const showAlert = (message, type = "success") => {
         setAlert({ message, type });
         setTimeout(() => setAlert(null), 3000);
     };
 
+    // Handle adding a new task
     const handleTaskSubmit = async (e) => {
         e.preventDefault(); 
         if (textInput.trim() === "") return;
@@ -91,6 +83,7 @@ const TaskDashboard = () => {
         }
     };
 
+    // Update task priority
     const handlePriorityUpdate = async (taskId, newPriority) => {
         try {
             const updatedTask = await updateTaskPriority(taskId, newPriority);
@@ -101,6 +94,7 @@ const TaskDashboard = () => {
         }
     };
 
+    // Update task text
     const handleTextUpdate = async (taskId) => {
         if (taskText.trim() !== "") {
             try {
@@ -115,6 +109,7 @@ const TaskDashboard = () => {
         }
     };
 
+    // Handle task deletion
     const handleRemove = async (taskId) => {
         try {
             await deleteTask(taskId);
@@ -125,6 +120,7 @@ const TaskDashboard = () => {
         }
     };
 
+    // Handle reminder updates
     const handleReminderUpdate = async (taskId, newReminderTime) => {
         try {
             const updatedTask = await updateTaskReminder(taskId, newReminderTime);
@@ -135,42 +131,44 @@ const TaskDashboard = () => {
         }
     };
 
+    // Clear notifications
     const handleClearNotifications = () => {
         setNotifications([]);
         showAlert("Notifications cleared");
     };
 
+    // Filter tasks by priority
     const getTasksByPriority = (priority) => tasks.filter((task) => task.priority === priority);
 
     return (
         <div className="task-dashboard">
             {<Header />}
             <div className="task-dashboard-header">
-            
-            <h1>Task Dashboard</h1>
-            <div className="notification-icon" onClick={() => setShowNotifications(!showNotifications)}>
-                <Bell size={22} />
-                {notifications.length > 0 && <span className="notification-badge">{notifications.length}</span>}
-            </div>
-            {showNotifications && (
-                <div className="notification-dropdown">
-                    {notifications.length > 0 ? (
-                        <>
-                            {notifications.map((task, index) => (
-                                <div key={index} className="notification-item">
-                                    <span>{`Reminder: ${task.text}`}</span>
-                                </div>
-                            ))}
-                            <button onClick={handleClearNotifications} className="clear-notifications-btn">
-                                Clear Notifications
-                            </button>
-                        </>
-                    ) : (
-                        <div className="notification-item">No new notifications</div>
-                    )}
+                <h1>Task Dashboard</h1>
+                <div className="notification-icon" onClick={() => setShowNotifications(!showNotifications)}>
+                    <Bell size={22} />
+                    {notifications.length > 0 && <span className="notification-badge">{notifications.length}</span>}
                 </div>
-            )}
+                {showNotifications && (
+                    <div className="notification-dropdown">
+                        {notifications.length > 0 ? (
+                            <>
+                                {notifications.map((task, index) => (
+                                    <div key={index} className="notification-item">
+                                        <span>{`Reminder: ${task.text}`}</span>
+                                    </div>
+                                ))}
+                                <button onClick={handleClearNotifications} className="clear-notifications-btn">
+                                    Clear Notifications
+                                </button>
+                            </>
+                        ) : (
+                            <div className="notification-item">No new notifications</div>
+                        )}
+                    </div>
+                )}
             </div>
+
             <div className="task-input">
                 <input
                     type="text"
@@ -226,9 +224,6 @@ const TaskDashboard = () => {
                                         setEditingTask(task);
                                         setTaskText(task.text);
                                     }}><Edit size={16} /> Edit</button>
-                                    {editingTask?.id === task.id ? (
-                                        <button onClick={() => handleTextUpdate(task.id)}><Save size={16} /> Save Changes</button>
-                                    ) : null}
                                     <button onClick={() => handleRemove(task.id)}><Trash2 size={16} /> Delete</button>
                                     <input
                                         type="datetime-local"
@@ -244,7 +239,7 @@ const TaskDashboard = () => {
                     </div>
                 ))}
             </div>
-            {<Footer/>}
+            {<Footer />}
 
             {alert && (
                 <div className={`alert ${alert.type}`}>

@@ -17,7 +17,6 @@ export const getTasks = async (userId) => {
     }
 };
 
-// Function to add a new task
 export const addTask = async (task) => {
     try {
         const response = await axios.post(`${API_BASE_URL}`, task, {
