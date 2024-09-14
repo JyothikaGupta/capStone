@@ -6,6 +6,8 @@ import { Bell, Edit, Trash2, Save } from 'lucide-react';
 import './TaskDashboard.css';
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
+import { fetchNotifications } from './taskService';
+
 
 const API_URL = 'http://localhost:8070/api/tasks';
 
@@ -21,37 +23,37 @@ const TaskDashboard = () => {
     const [showNotifications, setShowNotifications] = useState(false);
 
     useEffect(() => {
-        fetchTasks();
-        fetchNotifications(); // Fetch notifications on component mount
+        const userId = getCurrentUserId();
+        fetchTasks(userId);
+        fetchNotificationsFromApi(userId); // Use renamed function
         const intervalId = setInterval(() => {
-            fetchNotifications(); // Check for new notifications every minute
+            fetchNotificationsFromApi(userId); // Use renamed function
         }, 60000); 
         return () => clearInterval(intervalId);
     }, []);
-
+    
     // Fetch tasks for the current user
-    const fetchTasks = async () => {
+    const fetchTasks = async (userId) => {
         try {
-            const userId = getCurrentUserId();
             const tasksData = await getTasks(userId);
             setTasks(tasksData);
         } catch (error) {
             showAlert("Error fetching tasks", "error");
         }
     };
-
     // Fetch notifications for due tasks
-    const fetchNotifications = async () => {
+    const fetchNotificationsFromApi = async (userId) => {
         try {
-            const response = await axios.get(`${API_URL}/notifications`);
-            if (response.data && response.data.length > 0) {
-                setNotifications(response.data);
+            const notificationsData = await fetchNotifications(userId); // Assuming getNotifications is the correct function
+            if (notificationsData && notificationsData.length > 0) {
+                setNotifications(notificationsData);
                 showAlert("You have new notifications", "info");
             }
         } catch (error) {
             console.error("Error fetching notifications", error);
         }
     };
+    
 
     // Show alert messages for actions
     const showAlert = (message, type = "success") => {

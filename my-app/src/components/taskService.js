@@ -16,6 +16,15 @@ export const getTasks = async (userId) => {
         throw error;
     }
 };
+export const fetchNotifications = async (userId) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/notifications/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching notifications:", error);
+        throw error;
+    }
+};
 
 export const addTask = async (task) => {
     try {

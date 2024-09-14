@@ -20,18 +20,25 @@ const PreviousMoodReports = () => {
       setLoading(false);
       return;
     }
-
+  
     try {
       const response = await axios.get(`${API_BASE_URL}/entries`, {
         params: { userId: userId }
       });
-      setPreviousMoodReports(response.data);
+      // Log the response data to check its format
+      console.log(response.data);
+      if (Array.isArray(response.data)) {
+        setPreviousMoodReports(response.data);
+      } else {
+        setError('No Reports Present');
+      }
     } catch (error) {
       setError('Error fetching previous mood reports');
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchPreviousMoodReports();
@@ -58,21 +65,26 @@ const PreviousMoodReports = () => {
         <p className="error-message">{error}</p>
       ) : (
         <div className="reports-grid">
-          {previousMoodReports.map((report) => (
-            <div key={report.id} className="report-card">
-              <h3>Date: {new Date(report.entryDate).toLocaleDateString()}</h3>
-              <p>Mood Score: {report.moodScore}</p>
-              <p>Journal Entry: {report.journalEntry}</p>
-              <p>Sleep Hours: {report.sleepHours}</p>
-              <p>Water Intake: {report.waterIntake} ml</p>
-              <button onClick={() => handleDelete(report.id)} className="delete-button">Delete</button>
-            </div>
-          ))}
+          {Array.isArray(previousMoodReports) && previousMoodReports.length > 0 ? (
+            previousMoodReports.map((report) => (
+              <div key={report.id} className="report-card">
+                <h3>Date: {new Date(report.entryDate).toLocaleDateString()}</h3>
+                <p>Mood Score: {report.moodScore}</p>
+                <p>Journal Entry: {report.journalEntry}</p>
+                <p>Sleep Hours: {report.sleepHours}</p>
+                <p>Water Intake: {report.waterIntake} ml</p>
+                <button onClick={() => handleDelete(report.id)} className="delete-button">Delete</button>
+              </div>
+            ))
+          ) : (
+            <p>No mood reports available</p>
+          )}
         </div>
       )}
       <Footer />
     </div>
   );
+  
 };
 
 export default PreviousMoodReports;
